@@ -17,8 +17,21 @@ const status = document.getElementById("status");
 const remoteGestureSpan = document.getElementById("remote-gesture");
 
 const ws = new WebSocket("wss://skitter-rural-slipper.glitch.me/");
-ws.onopen = () => console.log("✅ WebSocket connected");
-ws.onerror = (err) => console.error("❌ WebSocket error:", err);
+
+ws.onopen = () => {
+  console.log("✅ WebSocket connected");
+  status.textContent += " | ✅ WebSocket connected";
+};
+
+ws.onerror = (err) => {
+  console.error("❌ WebSocket error:", err);
+  status.textContent += " | ❌ WebSocket error";
+};
+
+ws.onclose = () => {
+  console.warn("🔌 WebSocket disconnected");
+  status.textContent += " | 🔌 WebSocket disconnected";
+};
 
 let gestureTimeout;
 function updateRemoteGestureDisplay(gesture) {
@@ -199,6 +212,7 @@ function sendGesture(gesture) {
       from: localUid,
     });
     ws.send(msg);
+    console.log(`📤 Sent gesture to WebSocket: ${gesture}`);
   }
 }
 
