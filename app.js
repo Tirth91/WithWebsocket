@@ -16,16 +16,13 @@ const status = document.getElementById("status");
 
 const remoteGestureSpan = document.getElementById("remote-gesture");
 
-const ws = new WebSocket("wss://cce6805d-8140-4652-a9db-4480e722631a-00-1s8e6nwe8s468.sisko.replit.dev/");
-ws.onopen = () => console.log("WebSocket connected");
-ws.onerror = (err) => console.error("WebSocket error:", err);
+const ws = new WebSocket("wss://skitter-rural-slipper.glitch.me/");
+ws.onopen = () => console.log("✅ WebSocket connected");
+ws.onerror = (err) => console.error("❌ WebSocket error:", err);
 
 let gestureTimeout;
-
 function updateRemoteGestureDisplay(gesture) {
-  if (remoteGestureSpan) {
-    remoteGestureSpan.textContent = gesture || "Not received";
-  }
+  if (remoteGestureSpan) remoteGestureSpan.textContent = gesture || "Not received";
 
   clearTimeout(gestureTimeout);
   gestureTimeout = setTimeout(() => {
@@ -39,8 +36,6 @@ ws.onmessage = (event) => {
     if (type === "gesture" && from !== localUid) {
       const label = document.getElementById(`label-remote-${from}`);
       if (label) label.textContent = `Gesture: ${gesture}`;
-
-      // Update remote gesture display
       updateRemoteGestureDisplay(gesture);
     }
   } catch (err) {
@@ -197,18 +192,13 @@ function onResults(results) {
 }
 
 function sendGesture(gesture) {
-  try {
+  if (ws.readyState === WebSocket.OPEN && localUid != null) {
     const msg = JSON.stringify({
       type: "gesture",
       gesture: gesture,
       from: localUid,
     });
-
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(msg);
-    }
-  } catch (err) {
-    console.error("Failed to send gesture", err);
+    ws.send(msg);
   }
 }
 
