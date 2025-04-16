@@ -43,9 +43,19 @@ function updateRemoteGestureDisplay(gesture) {
   }, 5000);
 }
 
-ws.onmessage = (event) => {
+ws.onmessage = async (event) => {
   try {
-    const { type, gesture, from } = JSON.parse(event.data);
+    let data;
+
+    if (event.data instanceof Blob) {
+      const text = await event.data.text();
+      data = JSON.parse(text);
+    } else {
+      data = JSON.parse(event.data);
+    }
+
+    const { type, gesture, from } = data;
+
     if (type === "gesture" && from !== localUid) {
       const label = document.getElementById(`label-remote-${from}`);
       if (label) label.textContent = `Gesture: ${gesture}`;
@@ -55,6 +65,7 @@ ws.onmessage = (event) => {
     console.warn("WebSocket message parse error:", err);
   }
 };
+
 
 let model, localTrack, localUid;
 let participants = new Set();
