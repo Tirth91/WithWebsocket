@@ -6,9 +6,9 @@ const labelMap = [
   '1', '2', '3', '4', '5', '6', '7', '8', '9', 
   'A', 'Am', 'Are', 'B', 'C', 'D', 'E', 'F', 'G', 
   'H', 'Hello', 'How', 'I', 'J', 'K', 'L', 'M', 
-  'N', 'Namaste', 'O', 'P', 'Please', 'Q', 'R', 
-  'S', 'T', 'Thank You', 'U', 'V', 'W', 'X', 
-  'You', 'Z', 'ok'
+  'N', 'Namaste', 'O', 'Ok', 'P', 'Please', 'Q', 
+  'R', 'S', 'T', 'Thank You', 'U', 'V', 'W', 
+  'X', 'Y', 'You', 'Z'
 ];
 const CONFIDENCE_THRESHOLD = 0.7;
 const PREDICTION_INTERVAL = 500;
