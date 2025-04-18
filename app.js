@@ -4,9 +4,11 @@ const DEFAULT_CHANNEL = "test";
 
 const labelMap = [
   '1', '2', '3', '4', '5', '6', '7', '8', '9', 
-  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
-  'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 
-  'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+  'A', 'Am', 'Are', 'B', 'C', 'D', 'E', 'F', 'G', 
+  'H', 'Hello', 'How', 'I', 'J', 'K', 'L', 'M', 
+  'N', 'Namaste', 'O', 'P', 'Please', 'Q', 'R', 
+  'S', 'T', 'Thank You', 'U', 'V', 'W', 'X', 
+  'You', 'Z', 'ok'
 ];
 const CONFIDENCE_THRESHOLD = 0.7;
 const PREDICTION_INTERVAL = 500;
