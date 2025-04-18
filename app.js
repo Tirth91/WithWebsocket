@@ -3,12 +3,15 @@ const TOKEN = null;
 const DEFAULT_CHANNEL = "test";
 
 const labelMap = [
-  '1', '2', '3', '4', '5', '6', '7', '8', '9',       // 0-8
-  'A', 'Am', 'Are', 'B', 'C', 'D', 'E', 'F', 'G',    // 9-17
-  'Goodbye', 'H', 'Hello', 'How', 'I', 'J', 'K', 'L', // 18-25
-  'M', 'N', 'Namaste', 'O', 'Ok', 'P', 'Please', 'Q', // 26-33
-  'R', 'S', 'T', 'Thank You', 'U', 'V', 'W', 'X',     // 34-41
-  'Y', 'You', 'Z'                                     // 42-44
+  // Digits 0-8
+  '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  
+  // Letters and phrases 9-43
+  'A', 'Am', 'Are', 'B', 'C', 'D', 'E', 'F', 'G',
+  'Goodbye', 'H', 'Hello', 'How', 'I', 'J', 'K', 'L',
+  'M', 'N', 'Namaste', 'O', 'P', 'Please', 'Q', 'R',
+  'S', 'T', 'Thank You', 'U', 'V', 'W', 'X', 'Y',
+  'You', 'Z', 'ok'
 ];
 const CONFIDENCE_THRESHOLD = 0.7;
 const PREDICTION_INTERVAL = 500;
