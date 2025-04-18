@@ -2,7 +2,12 @@ const APP_ID = "2a25041a57024e289c67c36418eace00";
 const TOKEN = null;
 const DEFAULT_CHANNEL = "test";
 
-const labelMap = ["1L", "1R", "2L", "2R", "3L", "3R", "4L", "4R", "5R", "6L", "6R", "7L", "7R", "8L", "8R", "9L", "9R", "A", "B", "C", "D", "L"];
+const labelMap = [
+  '1', '2', '3', '4', '5', '6', '7', '8', '9', 
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
+  'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 
+  'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+];
 const CONFIDENCE_THRESHOLD = 0.7;
 const PREDICTION_INTERVAL = 500;
 
