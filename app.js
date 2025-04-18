@@ -3,11 +3,11 @@ const TOKEN = null;
 const DEFAULT_CHANNEL = "test";
 
 const labelMap = [
-  '1', '2', '3', '4', '5', '6', '7', '8', '9', 
-  'A', 'Am', 'Are', 'B', 'C', 'D', 'E', 'F', 'G', 
-  'H', 'Hello', 'How', 'I', 'J', 'K', 'L', 'M', 
-  'N', 'Namaste', 'O', 'Ok', 'P', 'Please', 'Q', 
-  'R', 'S', 'T', 'Thank You', 'U', 'V', 'W', 
+  '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  'A', 'Am', 'Are', 'B', 'C', 'D', 'E', 'F', 'G',
+  'Goodbye', 'H', 'Hello', 'How', 'I', 'J', 'K', 'L',
+  'M', 'N', 'Namaste', 'O', 'Ok', 'P', 'Please', 'Q',
+  'R', 'S', 'T', 'Thank You', 'U', 'V', 'W',
   'X', 'Y', 'You', 'Z'
 ];
 const CONFIDENCE_THRESHOLD = 0.7;
