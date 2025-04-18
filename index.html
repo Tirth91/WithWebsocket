@@ -53,9 +53,15 @@
       font-weight: bold;
     }
     #status,
-    #participant-count {
+    #participant-count,
+    #remote-gesture-container {
       text-align: center;
       margin: 1em 0;
+    }
+    #remote-gesture {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00e676;
     }
     button {
       padding: 0.5em 1em;
@@ -74,12 +80,15 @@
     <input id="room-id-input" placeholder="Enter Room ID" />
     <button onclick="joinCall()">Join</button>
     <button onclick="leaveCall()" id="leave-btn" disabled>Leave</button>
+ <!--    <button onclick="toggleMute()" id="mute-btn" disabled>Mute</button> -->
   </div>
 
   <div id="status">Not connected</div>
   <div id="participant-count">Participants: 0</div>
+
+ 
   <div id="video-grid"></div>
-  
+
   <!-- Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.min.js"></script>

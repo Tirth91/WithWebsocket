@@ -17,8 +17,8 @@ const videoGrid = document.getElementById("video-grid");
 const participantCount = document.getElementById("participant-count");
 const leaveBtn = document.getElementById("leave-btn");
 const roomIdInput = document.getElementById("room-id-input");
+const muteBtn = document.getElementById("mute-btn");
 const status = document.getElementById("status");
-
 const remoteGestureSpan = document.getElementById("remote-gesture");
 
 const ws = new WebSocket("wss://skitter-rural-slipper.glitch.me/");
@@ -41,7 +41,6 @@ ws.onclose = () => {
 let gestureTimeout;
 function updateRemoteGestureDisplay(gesture) {
   if (remoteGestureSpan) remoteGestureSpan.textContent = gesture || "Not received";
-
   clearTimeout(gestureTimeout);
   gestureTimeout = setTimeout(() => {
     remoteGestureSpan.textContent = "Not received";
@@ -71,8 +70,7 @@ ws.onmessage = async (event) => {
   }
 };
 
-
-let model, localTrack, localUid;
+let model, localTrack, localAudioTrack, localUid;
 let participants = new Set();
 let lastPredictionTime = 0;
 
@@ -90,7 +88,7 @@ async function joinCall() {
   status.textContent = "Loading model...";
   model = await tf.loadLayersModel("landmark_model_tfjs/model.json");
 
-  const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+  const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
   const gestureVideo = document.createElement("video");
   gestureVideo.srcObject = stream;
@@ -112,10 +110,11 @@ async function joinCall() {
   cam.start();
 
   localTrack = await AgoraRTC.createCameraVideoTrack({ videoSource: stream.getVideoTracks()[0] });
+  localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
 
   status.textContent = "Joining call...";
   localUid = await client.join(APP_ID, CHANNEL, TOKEN, null);
-  await client.publish([localTrack]);
+  await client.publish([localTrack, localAudioTrack]);
 
   createVideoBox("local", "You");
   localTrack.play("local");
@@ -124,6 +123,7 @@ async function joinCall() {
   setupListeners();
 
   leaveBtn.disabled = false;
+  muteBtn.disabled = false;
   roomIdInput.disabled = true;
   status.textContent = `In call: ${CHANNEL}`;
 }
@@ -131,22 +131,35 @@ async function joinCall() {
 function setupListeners() {
   client.on("user-published", async (user, mediaType) => {
     await client.subscribe(user, mediaType);
+    const id = `remote-${user.uid}`;
+
     if (mediaType === "video") {
-      const id = `remote-${user.uid}`;
       createVideoBox(id, `User ${user.uid}`);
       user.videoTrack.play(id);
       participants.add(id);
-      updateParticipantCount();
+    } else if (mediaType === "audio") {
+      user.audioTrack.play();
     }
-  });
 
-  client.on("user-unpublished", user => {
-    const id = `remote-${user.uid}`;
-    document.getElementById(`box-${id}`)?.remove();
-    participants.delete(id);
     updateParticipantCount();
   });
 
+  client.on("user-unpublished", (user, mediaType) => {
+    console.log(`user-unpublished: ${user.uid}, mediaType: ${mediaType}`);
+  
+    if (mediaType === "video") {
+      const id = `remote-${user.uid}`;
+      document.getElementById(`box-${id}`)?.remove();
+      participants.delete(id);
+      updateParticipantCount();
+    }
+  
+    if (mediaType === "audio") {
+      console.log(`User ${user.uid} muted their mic`);
+      // Optional: show a mic muted icon
+    }
+  });
+  
   client.on("user-left", user => {
     const id = `remote-${user.uid}`;
     document.getElementById(`box-${id}`)?.remove();
@@ -232,14 +245,31 @@ function sendGesture(gesture) {
   }
 }
 
+let isAudioMuted = false;
+
+function toggleMute() {
+  if (!localAudioTrack) return;
+
+  isAudioMuted = !isAudioMuted;
+
+  localAudioTrack.setEnabled(!isAudioMuted);  // Enable if not muted
+  const muteBtn = document.getElementById("mute-btn");
+  muteBtn.textContent = isAudioMuted ? 'Unmute' : 'Mute';
+  muteBtn.style.backgroundColor = isAudioMuted ? 'cadetblue' : '#EE4B2B';
+}
+
+
 async function leaveCall() {
   await client.leave();
   localTrack?.stop();
   localTrack?.close();
+  localAudioTrack?.stop();
+  localAudioTrack?.close();
   videoGrid.innerHTML = "";
   participants.clear();
   updateParticipantCount();
   leaveBtn.disabled = true;
+  muteBtn.disabled = true;
   roomIdInput.disabled = false;
   status.textContent = "Left call";
 }
